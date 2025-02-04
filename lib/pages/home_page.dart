@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final _myBox = Hive.box('mybox');
   Database db = Database();
 
@@ -78,17 +77,19 @@ class _HomePageState extends State<HomePage> {
         onPressed: createNewTask,
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: db.toDoList.length,
-        itemBuilder: (context, index) {
-          return ToDoTile(
-            taskName: db.toDoList[index][0],
-            taskCompleted: db.toDoList[index][1],
-            onChanged: (value) => checkBoxChanged(value, index),
-            deleteFunction: (context) => deleteTask(index),
-          );
-        },
-      ),
+      body: (db.toDoList.isEmpty)
+          ? Center(child: Text('No tasks yet'))
+          : ListView.builder(
+              itemCount: db.toDoList.length,
+              itemBuilder: (context, index) {
+                return ToDoTile(
+                  taskName: db.toDoList[index][0],
+                  taskCompleted: db.toDoList[index][1],
+                  onChanged: (value) => checkBoxChanged(value, index),
+                  deleteFunction: (context) => deleteTask(index),
+                );
+              },
+            ),
     );
   }
 }
